@@ -12,11 +12,15 @@ public class StoreModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+
     private UUID id;
     private String storeName;
     private String storeAddress;
     private String ownerName;
+
+    @Column(unique = true)
     private String ownerEmail;
+
     private String ownerPassword;
     private String contactPhone;
     private String contactEmail;

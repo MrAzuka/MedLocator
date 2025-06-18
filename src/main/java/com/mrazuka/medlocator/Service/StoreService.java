@@ -4,6 +4,7 @@ import com.mrazuka.medlocator.Dto.StoreDTO;
 import com.mrazuka.medlocator.Model.StoreModel;
 import com.mrazuka.medlocator.Repository.StoreRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,6 +15,7 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
     private final ModelMapper modelMapper;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
     public StoreService(StoreRepository storeRepository, ModelMapper modelMapper) {
         this.storeRepository = storeRepository;
@@ -21,6 +23,7 @@ public class StoreService {
     }
 // TODO: Add password encryption
     public StoreModel createStore(StoreModel storeModel){
+        storeModel.setOwnerPassword(bCryptPasswordEncoder.encode(storeModel.getOwnerPassword()));
         StoreModel storeSavedToDB = storeRepository.save(storeModel);
         return storeSavedToDB;
     }
