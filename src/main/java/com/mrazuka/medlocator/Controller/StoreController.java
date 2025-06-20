@@ -1,10 +1,11 @@
 package com.mrazuka.medlocator.Controller;
 
-import com.mrazuka.medlocator.Dto.StoreDTO;
+import com.mrazuka.medlocator.Dto.StoreLoginDTO;
+import com.mrazuka.medlocator.Dto.StoreResponseDTO;
 import com.mrazuka.medlocator.Model.StoreModel;
 import com.mrazuka.medlocator.Service.StoreService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -19,21 +20,32 @@ public class StoreController {
         this.storeService = storeService;
     }
 
-    @PostMapping
-    public ResponseEntity<StoreModel> addStore(@RequestBody StoreModel storeModel) {
+    @PostMapping("/register")
+    public ResponseEntity<?> addStore(@RequestBody StoreModel storeModel) {
         try{
             StoreModel store = storeService.createStore(storeModel);
-            return ResponseEntity.ok(store);
+            return ResponseEntity.ok("Store Created");
         }catch (EntityNotFoundException e){
             return ResponseEntity.notFound().build();
         }
 
     }
+//    TODO: Create DTO to accept request
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody StoreLoginDTO storeLoginDTO) {
+        try{
+            return storeService.verify(storeLoginDTO);
+        } catch (Exception e) {
+            System.err.println("Login error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed: " + e.getMessage());
+
+        }
+    }
 
     @GetMapping("/{storeId}")
-    public ResponseEntity<StoreDTO> getStore(@PathVariable UUID storeId) {
+    public ResponseEntity<StoreResponseDTO> getStore(@PathVariable UUID storeId) {
         try{
-            StoreDTO store = storeService.getStore(storeId);
+            StoreResponseDTO store = storeService.getStore(storeId);
             return ResponseEntity.ok(store);
         }catch (EntityNotFoundException e){
             return ResponseEntity.notFound().build();

@@ -1,13 +1,13 @@
 package com.mrazuka.medlocator.Dto;
 
-public class StoreDTO {
+public class StoreResponseDTO {
 
     private String storeName;
     private String storeAddress;
     private String contactPhone;
     private String contactEmail;
 
-    public StoreDTO() {
+    public StoreResponseDTO() {
         super();
     }
 

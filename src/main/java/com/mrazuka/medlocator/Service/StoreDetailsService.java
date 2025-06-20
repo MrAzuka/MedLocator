@@ -10,7 +10,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class StoreDetailsService implements UserDetailsService {
-    private StoreRepository storeRepository;
+    private final StoreRepository storeRepository;
+
+    public StoreDetailsService(StoreRepository storeRepository) {
+        this.storeRepository = storeRepository;
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String email){

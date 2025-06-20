@@ -3,9 +3,12 @@ package com.mrazuka.medlocator.Config;
 import com.mrazuka.medlocator.Service.StoreDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -26,17 +29,17 @@ public class SecurityConfiguration {
 //        disable csrf
         httpSecurity.csrf(customizer -> customizer.disable());
 //        only authorized requests
-        httpSecurity.authorizeHttpRequests(requests -> requests.anyRequest().authenticated());
+        httpSecurity.authorizeHttpRequests(
+                requests -> requests
+                        // Allow POST requests to /stores/register  without authentication
+                        .requestMatchers(HttpMethod.POST, "/store/**").permitAll()
+                        .anyRequest().authenticated());
 //        allow request from other sources that are not the browser
         httpSecurity.httpBasic(Customizer.withDefaults());
 //        create a stateless http, this is because we disabled csrf
         httpSecurity.sessionManagement(
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
-
-
-
-
         return httpSecurity.build();
     }
 
@@ -48,6 +51,12 @@ public class SecurityConfiguration {
 
 
         return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+
     }
 
     @Bean
