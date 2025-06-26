@@ -14,14 +14,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
     private final StoreDetailsService storeDetailsService;
+    private final JwtFilter jwtFilter;
 
-    public SecurityConfiguration(StoreDetailsService storeDetailsService) {
+    public SecurityConfiguration(StoreDetailsService storeDetailsService, JwtFilter jwtFilter) {
         this.storeDetailsService = storeDetailsService;
+        this.jwtFilter = jwtFilter;
     }
 
     @Bean
@@ -40,6 +43,7 @@ public class SecurityConfiguration {
         httpSecurity.sessionManagement(
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
+        httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
