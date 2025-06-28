@@ -2,7 +2,10 @@ package com.mrazuka.medlocator.Model;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -24,6 +27,15 @@ public class StoreModel {
     private String ownerPassword;
     private String contactPhone;
     private String contactEmail;
+
+    @CreationTimestamp // Automatically sets the creation timestamp when the entity is first persisted
+    @Column(nullable = false, updatable = false) // Often non-nullable and not updatable manually
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp // Automatically updates the timestamp on every entity update
+    @Column(nullable = false) // Often non-nullable
+    private LocalDateTime lastModifiedAt; // Renamed from updatedAt for common convention
+
 
     // Optionally, if you want to access drugs from a store (one-to-many relationship)
     @OneToMany(mappedBy = "store") // 'store' is the field name in the Drug entity
@@ -120,6 +132,14 @@ public class StoreModel {
 
     public void setDrugs(Set<DrugModel> drugs) {
         this.drugs = drugs;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getLastModifiedAt() {
+        return lastModifiedAt;
     }
 
     @Override
