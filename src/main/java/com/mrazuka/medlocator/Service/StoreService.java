@@ -57,7 +57,7 @@ public class StoreService {
         }
     }
 
-    public ResponseEntity<?> verify(StoreLoginDTO storeLoginDTO) {
+    public String verify(StoreLoginDTO storeLoginDTO) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         storeLoginDTO.getOwnerEmail(),
@@ -66,10 +66,10 @@ public class StoreService {
         );
 
         if(authentication.isAuthenticated()) {
-            String token = jwtService.generateToken(storeLoginDTO.getOwnerEmail());
-          return ResponseEntity.ok(token);
+
+          return jwtService.generateToken(storeLoginDTO.getOwnerEmail());
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        throw new RuntimeException("User can't login");
     }
 
     public StoreUpdateDTO updateStore(UUID storeId, StoreUpdateDTO storeUpdateDTO) {

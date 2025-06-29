@@ -1,10 +1,10 @@
 package com.mrazuka.medlocator.Controller;
+
 import com.mrazuka.medlocator.Dto.DrugCreateDTO;
-import com.mrazuka.medlocator.Model.DrugModel;
-import com.mrazuka.medlocator.Model.StoreModel;
 import com.mrazuka.medlocator.Service.DrugService;
 import com.mrazuka.medlocator.Service.StoreService;
 import com.mrazuka.medlocator.Utils.ApiResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +35,8 @@ public class DrugController {
             );
             return ResponseEntity.ok(response);
         }catch (Exception e){
-            return ResponseEntity.notFound().build();
+            ApiResponse<DrugCreateDTO> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 //    @GetMapping("/all")
