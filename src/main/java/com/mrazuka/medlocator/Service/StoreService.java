@@ -119,4 +119,17 @@ public class StoreService {
 
         return authentication.getName();
     }
+
+    public UUID getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("No authenticated user found.");
+        }
+        String email = authentication.getName();
+        StoreModel store = storeRepository.findByOwnerEmail(email);
+        if (store == null) {
+            throw new SecurityException("Store not found with email: " + email);
+        }
+        return store.getId();
+    }
 }

@@ -6,12 +6,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public class DrugModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+
+    private UUID id;
     private String drugName;
     private String chemicalName;
     private String description;
@@ -46,7 +48,7 @@ public class DrugModel {
     public DrugModel() {
     }
 
-    public DrugModel(Integer id, String drugName,
+    public DrugModel(UUID id, String drugName,
                      String chemicalName, String description,
                      double price, int quantity, StoreModel store) {
         this.id = id;
@@ -58,11 +60,11 @@ public class DrugModel {
         this.store = store;
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
