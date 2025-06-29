@@ -39,10 +39,10 @@ public class StoreService {
         this.jwtService = jwtService;
     }
 
-    public StoreModel createStore(StoreModel storeModel){
+    public StoreResponseDTO createStore(StoreModel storeModel){
         storeModel.setOwnerPassword(bCryptPasswordEncoder.encode(storeModel.getOwnerPassword()));
         StoreModel storeSavedToDB = storeRepository.save(storeModel);
-        return storeSavedToDB;
+        return modelMapper.map(storeSavedToDB, StoreResponseDTO.class);
     }
 
     public StoreResponseDTO getStore(UUID storeId){

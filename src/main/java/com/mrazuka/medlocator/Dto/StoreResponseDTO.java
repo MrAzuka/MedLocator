@@ -1,14 +1,26 @@
 package com.mrazuka.medlocator.Dto;
 
+import java.time.LocalDateTime;
+
 public class StoreResponseDTO {
 
     private String storeName;
     private String storeAddress;
     private String contactPhone;
     private String contactEmail;
+    private String ownerName;
+
 
     public StoreResponseDTO() {
         super();
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
     public String getStoreName() {

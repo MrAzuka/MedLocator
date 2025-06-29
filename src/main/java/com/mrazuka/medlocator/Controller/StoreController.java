@@ -22,16 +22,16 @@ public class StoreController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<StoreModel>> addStore(@RequestBody StoreModel storeModel) {
+    public ResponseEntity<ApiResponse<StoreResponseDTO>> addStore(@RequestBody StoreModel storeModel) {
         try{
-            StoreModel store = storeService.createStore(storeModel);
-            ApiResponse<StoreModel> response = ApiResponse.success(
+            StoreResponseDTO store = storeService.createStore(storeModel);
+            ApiResponse<StoreResponseDTO> response = ApiResponse.success(
                     "Store created successfully!",
                     store
             );
             return ResponseEntity.ok(response);
         }catch (Exception e){
-            ApiResponse<StoreModel> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
+            ApiResponse<StoreResponseDTO> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
 
