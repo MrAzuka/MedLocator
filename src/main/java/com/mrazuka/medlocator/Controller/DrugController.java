@@ -1,6 +1,7 @@
 package com.mrazuka.medlocator.Controller;
 
 import com.mrazuka.medlocator.Dto.DrugDTO;
+import com.mrazuka.medlocator.Dto.StoreDTO;
 import com.mrazuka.medlocator.Service.DrugService;
 import com.mrazuka.medlocator.Service.StoreService;
 import com.mrazuka.medlocator.Utils.ApiResponse;
@@ -72,12 +73,34 @@ public class DrugController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
-//    @PatchMapping("/edit/{drugId}")
-//    public ResponseEntity<?> editDrugDetails(){
-//
-//    }
-//    @DeleteMapping("/remove")
-//    public ResponseEntity<?> removeDrug(){
-//
-//    }
+
+    @PatchMapping("/edit/{drugId}")
+    public ResponseEntity<ApiResponse<DrugDTO>> editDrugDetails(@PathVariable UUID drugId, @RequestBody DrugDTO drugDTO){
+        try{
+            DrugDTO drug = drugService.editDrug(drugId, drugDTO);
+            ApiResponse<DrugDTO> response = ApiResponse.success(
+                    "Drug update successfully!",
+                    drug
+            );
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ApiResponse<DrugDTO> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+    @DeleteMapping("/remove/{drugId}")
+    public ResponseEntity<ApiResponse<?>> removeDrug(@PathVariable UUID drugId){
+        try{
+            drugService.deleteDrug(drugId);
+            ApiResponse<?> response = ApiResponse.success(
+                    "Drug delete successfully!",
+                    ""
+            );
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ApiResponse<?> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
 }

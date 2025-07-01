@@ -4,6 +4,7 @@ import com.mrazuka.medlocator.Model.DrugModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface DrugRepository extends JpaRepository<DrugModel, UUID> {
@@ -14,4 +15,5 @@ public interface DrugRepository extends JpaRepository<DrugModel, UUID> {
     // that DrugModel.store refers to.
     //  The parameter UUID storeId is then correctly matched against the id of the StoreModel.
     List<DrugModel> findAllByStore_Id(UUID storeId);
+    Optional<DrugModel> findByIdAndStore_Id(UUID drugId, UUID storeId);
   }

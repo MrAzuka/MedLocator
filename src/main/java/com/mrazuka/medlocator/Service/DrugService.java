@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -18,11 +19,13 @@ public class DrugService {
     private final DrugRepository drugRepository;
     private final StoreRepository storeRepository;
     private final ModelMapper modelMapper;
+    private final StoreService storeService;
 
-    public DrugService(DrugRepository drugRepository, ModelMapper modelMapper, StoreRepository storeRepository) {
+    public DrugService(DrugRepository drugRepository, ModelMapper modelMapper, StoreRepository storeRepository, StoreService storeService) {
         this.drugRepository = drugRepository;
         this.storeRepository = storeRepository;
         this.modelMapper = modelMapper;
+        this.storeService = storeService;
     }
 
     public DrugDTO createDrug(DrugDTO drugDto, UUID storeId) {
@@ -51,5 +54,45 @@ public class DrugService {
                 .orElseThrow(() -> new EntityNotFoundException("Drug with ID " + drugId + " not found."));
 
         return modelMapper.map(drug, DrugDTO.class);
+    }
+
+    public DrugDTO editDrug(UUID drugId, DrugDTO drugDTO) {
+        UUID storeId = storeService.getCurrentUserId();
+
+        Optional<DrugModel> drug = drugRepository.findByIdAndStore_Id(drugId, storeId);
+
+        if(drug.isPresent()) {
+            DrugModel existingDrug = drug.get();
+
+            if(drugDTO.getDrugName() != null) {
+                existingDrug.setDrugName(drugDTO.getDrugName());
+            }
+            if(drugDTO.getChemicalName() != null) {
+                existingDrug.setChemicalName(drugDTO.getChemicalName());
+            }
+            if(drugDTO.getDescription() != null) {
+                existingDrug.setDescription(drugDTO.getDescription());
+            }
+            if(drugDTO.getQuantity() != null){
+                existingDrug.setQuantity(drugDTO.getQuantity());
+            }
+            if (drugDTO.getPrice() != null) {
+                existingDrug.setPrice(drugDTO.getPrice());
+            }
+
+            return modelMapper.map(drugRepository.save(existingDrug), DrugDTO.class);
+        }else {
+            // Handle case where drug with given ID is not found
+            throw new RuntimeException("Drug not found with ID: " + drugId);
+        }
+    }
+
+    public void deleteDrug(UUID drugId) {
+        UUID storeId = storeService.getCurrentUserId();
+
+        Optional<DrugModel> drug = drugRepository.findByIdAndStore_Id(drugId, storeId);
+
+        drug.ifPresent(drugRepository::delete);
+
     }
 }

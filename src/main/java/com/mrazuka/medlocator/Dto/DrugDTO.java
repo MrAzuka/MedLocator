@@ -12,11 +12,12 @@ public class DrugDTO {
 
     @NotNull(message = "Price cannot be null")
     @Positive(message = "Price must be positive")
-    private double price;
+    private Double price;
 
     @NotNull(message = "Quantity cannot be null")
     @Positive(message = "Quantity must be positive")
-    private int quantity;
+//    Only using wrapper Integer class in DTO to check if null
+    private Integer quantity;
     private StoreDTO store;
 
     public DrugDTO(){
@@ -47,19 +48,19 @@ public class DrugDTO {
         this.description = description;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
     public StoreDTO getStore() {
