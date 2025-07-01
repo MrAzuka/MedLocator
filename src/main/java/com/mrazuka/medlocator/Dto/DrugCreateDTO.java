@@ -18,7 +18,7 @@ public class DrugCreateDTO {
     @NotNull(message = "Quantity cannot be null")
     @Positive(message = "Quantity must be positive")
     private int quantity;
-    private StoreModel store;
+    private StoreResponseDTO store;
 
     public DrugCreateDTO(){
         super();
@@ -63,11 +63,11 @@ public class DrugCreateDTO {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    public StoreModel getStore() {
+    public StoreResponseDTO getStore() {
         return store;
     }
 
-    public void setStore(StoreModel store) {
+    public void setStore(StoreResponseDTO store) {
         this.store = store;
     }
 
