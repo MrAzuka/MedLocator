@@ -1,6 +1,6 @@
 package com.mrazuka.medlocator.Service;
 
-import com.mrazuka.medlocator.Dto.DrugCreateDTO;
+import com.mrazuka.medlocator.Dto.DrugDTO;
 import com.mrazuka.medlocator.Model.DrugModel;
 import com.mrazuka.medlocator.Model.StoreModel;
 import com.mrazuka.medlocator.Repository.DrugRepository;
@@ -25,31 +25,31 @@ public class DrugService {
         this.modelMapper = modelMapper;
     }
 
-    public DrugCreateDTO createDrug(DrugCreateDTO drugDto, UUID storeId) {
+    public DrugDTO createDrug(DrugDTO drugDto, UUID storeId) {
         StoreModel store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new EntityNotFoundException("Store with ID " + storeId + " not found."));
 
         DrugModel drug = modelMapper.map(drugDto, DrugModel.class);
 
         drug.setStore(store);
-        return modelMapper.map(drugRepository.save(drug), DrugCreateDTO.class);
+        return modelMapper.map(drugRepository.save(drug), DrugDTO.class);
     }
 
-    public List<DrugCreateDTO> getAllStoreDrugs(UUID id) {
+    public List<DrugDTO> getAllStoreDrugs(UUID id) {
         List<DrugModel> drugs = drugRepository.findAllByStore_Id(id);
 
         // Map the list of DrugModel to a list of DrugCreateDTO
-        List<DrugCreateDTO> drugCreateDTOs = drugs.stream()
-                .map(drugModel -> modelMapper.map(drugModel, DrugCreateDTO.class))
+        List<DrugDTO> drugDTOS = drugs.stream()
+                .map(drugModel -> modelMapper.map(drugModel, DrugDTO.class))
                 .collect(Collectors.toList());
 
-        return drugCreateDTOs;
+        return drugDTOS;
     }
 
-    public DrugCreateDTO getSingleDrug(UUID drugId) {
+    public DrugDTO getSingleDrug(UUID drugId) {
         DrugModel drug = drugRepository.findById(drugId)
                 .orElseThrow(() -> new EntityNotFoundException("Drug with ID " + drugId + " not found."));
 
-        return modelMapper.map(drug, DrugCreateDTO.class);
+        return modelMapper.map(drug, DrugDTO.class);
     }
 }

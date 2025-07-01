@@ -1,8 +1,7 @@
 package com.mrazuka.medlocator.Dto;
-import com.mrazuka.medlocator.Model.StoreModel;
 import jakarta.validation.constraints.*;
 
-public class DrugCreateDTO {
+public class DrugDTO {
     @NotBlank(message = "Drug name cannot be empty")
     private String drugName;
 
@@ -18,9 +17,9 @@ public class DrugCreateDTO {
     @NotNull(message = "Quantity cannot be null")
     @Positive(message = "Quantity must be positive")
     private int quantity;
-    private StoreResponseDTO store;
+    private StoreDTO store;
 
-    public DrugCreateDTO(){
+    public DrugDTO(){
         super();
     }
 
@@ -63,11 +62,11 @@ public class DrugCreateDTO {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    public StoreResponseDTO getStore() {
+    public StoreDTO getStore() {
         return store;
     }
 
-    public void setStore(StoreResponseDTO store) {
+    public void setStore(StoreDTO store) {
         this.store = store;
     }
 

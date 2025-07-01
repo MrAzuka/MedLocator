@@ -1,14 +1,10 @@
 package com.mrazuka.medlocator.Service;
 
 import com.mrazuka.medlocator.Dto.StoreLoginDTO;
-import com.mrazuka.medlocator.Dto.StoreResponseDTO;
-import com.mrazuka.medlocator.Dto.StoreUpdateDTO;
+import com.mrazuka.medlocator.Dto.StoreDTO;
 import com.mrazuka.medlocator.Model.StoreModel;
 import com.mrazuka.medlocator.Repository.StoreRepository;
-import org.apache.catalina.Store;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,19 +35,18 @@ public class StoreService {
         this.jwtService = jwtService;
     }
 
-    public StoreResponseDTO createStore(StoreModel storeModel){
+    public StoreDTO createStore(StoreModel storeModel){
         storeModel.setOwnerPassword(bCryptPasswordEncoder.encode(storeModel.getOwnerPassword()));
         StoreModel storeSavedToDB = storeRepository.save(storeModel);
-        return modelMapper.map(storeSavedToDB, StoreResponseDTO.class);
+        return modelMapper.map(storeSavedToDB, StoreDTO.class);
     }
 
-    public StoreResponseDTO getStore(UUID storeId){
+    public StoreDTO getStore(UUID storeId){
         Optional<StoreModel> store = storeRepository.findById(storeId);
         if(store.isPresent()){
-            StoreResponseDTO storeResponseDTO = modelMapper.map(store.get(), StoreResponseDTO.class);
-            return storeResponseDTO;
+            StoreDTO storeDTO = modelMapper.map(store.get(), StoreDTO.class);
+            return storeDTO;
         }else{
-            // TODO: Create Exception Class to handle errors
             throw new RuntimeException("Store not found with ID: " + storeId);
 
         }
@@ -72,7 +67,7 @@ public class StoreService {
         throw new RuntimeException("User can't login");
     }
 
-    public StoreUpdateDTO updateStore(UUID storeId, StoreUpdateDTO storeUpdateDTO) {
+    public StoreDTO updateStore(UUID storeId, StoreDTO storeUpdateDTO) {
         // Check that user logged in is the owner of the resource
         String currentUserEmail = getCurrentUserEmail();
         // Check if resource exists
@@ -101,7 +96,7 @@ public class StoreService {
             if(storeUpdateDTO.getOwnerName() != null){
                 existingStore.setOwnerName(storeUpdateDTO.getOwnerName());
             }
-            return modelMapper.map(storeRepository.save(existingStore), StoreUpdateDTO.class);
+            return modelMapper.map(storeRepository.save(existingStore), StoreDTO.class);
         }else {
             // Handle case where store with given ID is not found
             throw new RuntimeException("Store not found with ID: " + storeId);

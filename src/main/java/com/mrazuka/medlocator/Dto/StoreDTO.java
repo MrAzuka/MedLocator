@@ -1,14 +1,24 @@
 package com.mrazuka.medlocator.Dto;
 
-public class StoreUpdateDTO {
+public class StoreDTO {
+
     private String storeName;
     private String storeAddress;
-    private String ownerName;
     private String contactPhone;
     private String contactEmail;
+    private String ownerName;
 
-    public StoreUpdateDTO() {
+
+    public StoreDTO() {
         super();
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
     public String getStoreName() {
@@ -25,14 +35,6 @@ public class StoreUpdateDTO {
 
     public void setStoreAddress(String storeAddress) {
         this.storeAddress = storeAddress;
-    }
-
-    public String getOwnerName() {
-        return ownerName;
-    }
-
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
     }
 
     public String getContactPhone() {

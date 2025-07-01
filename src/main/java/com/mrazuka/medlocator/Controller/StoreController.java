@@ -1,8 +1,7 @@
 package com.mrazuka.medlocator.Controller;
 
 import com.mrazuka.medlocator.Dto.StoreLoginDTO;
-import com.mrazuka.medlocator.Dto.StoreResponseDTO;
-import com.mrazuka.medlocator.Dto.StoreUpdateDTO;
+import com.mrazuka.medlocator.Dto.StoreDTO;
 import com.mrazuka.medlocator.Model.StoreModel;
 import com.mrazuka.medlocator.Service.StoreService;
 import com.mrazuka.medlocator.Utils.ApiResponse;
@@ -22,16 +21,16 @@ public class StoreController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<StoreResponseDTO>> addStore(@RequestBody StoreModel storeModel) {
+    public ResponseEntity<ApiResponse<StoreDTO>> addStore(@RequestBody StoreModel storeModel) {
         try{
-            StoreResponseDTO store = storeService.createStore(storeModel);
-            ApiResponse<StoreResponseDTO> response = ApiResponse.success(
+            StoreDTO store = storeService.createStore(storeModel);
+            ApiResponse<StoreDTO> response = ApiResponse.success(
                     "Store created successfully!",
                     store
             );
             return ResponseEntity.ok(response);
         }catch (Exception e){
-            ApiResponse<StoreResponseDTO> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
+            ApiResponse<StoreDTO> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
 
@@ -54,31 +53,31 @@ public class StoreController {
     }
 
     @GetMapping("/{storeId}")
-    public ResponseEntity<ApiResponse<StoreResponseDTO>> getStore(@PathVariable UUID storeId) {
+    public ResponseEntity<ApiResponse<StoreDTO>> getStore(@PathVariable UUID storeId) {
         try{
-            StoreResponseDTO store = storeService.getStore(storeId);
-            ApiResponse<StoreResponseDTO> response = ApiResponse.success(
+            StoreDTO store = storeService.getStore(storeId);
+            ApiResponse<StoreDTO> response = ApiResponse.success(
                     "Store fetched successfully!",
                     store
             );
             return ResponseEntity.ok(response);
         }catch (Exception e){
-            ApiResponse<StoreResponseDTO> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
+            ApiResponse<StoreDTO> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
     @PatchMapping("/edit/{storeId}")
-    public ResponseEntity<ApiResponse<StoreUpdateDTO>> editStore(@RequestBody StoreUpdateDTO storeUpdateDTO, @PathVariable UUID storeId) {
+    public ResponseEntity<ApiResponse<StoreDTO>> editStore(@RequestBody StoreDTO storeUpdateDTO, @PathVariable UUID storeId) {
         try{
-            StoreUpdateDTO store = storeService.updateStore(storeId, storeUpdateDTO);
-            ApiResponse<StoreUpdateDTO> response = ApiResponse.success(
+            StoreDTO store = storeService.updateStore(storeId, storeUpdateDTO);
+            ApiResponse<StoreDTO> response = ApiResponse.success(
                     "Store fetched successfully!",
                     store
             );
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            ApiResponse<StoreUpdateDTO> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
+            ApiResponse<StoreDTO> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }

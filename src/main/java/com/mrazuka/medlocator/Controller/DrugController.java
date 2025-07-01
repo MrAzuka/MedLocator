@@ -1,6 +1,6 @@
 package com.mrazuka.medlocator.Controller;
 
-import com.mrazuka.medlocator.Dto.DrugCreateDTO;
+import com.mrazuka.medlocator.Dto.DrugDTO;
 import com.mrazuka.medlocator.Service.DrugService;
 import com.mrazuka.medlocator.Service.StoreService;
 import com.mrazuka.medlocator.Utils.ApiResponse;
@@ -24,51 +24,51 @@ public class DrugController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse<DrugCreateDTO>> addDrug(@RequestBody DrugCreateDTO drugCreateDTO){
+    public ResponseEntity<ApiResponse<DrugDTO>> addDrug(@RequestBody DrugDTO drugDTO){
         try{
             UUID id = storeService.getCurrentUserId();
-            DrugCreateDTO drug = drugService.createDrug(drugCreateDTO, id);
+            DrugDTO drug = drugService.createDrug(drugDTO, id);
 
             // Construct the ApiResponse
-            ApiResponse<DrugCreateDTO> response = ApiResponse.success(
+            ApiResponse<DrugDTO> response = ApiResponse.success(
                     "Drug created successfully!",
                     drug
             );
             return ResponseEntity.ok(response);
         }catch (Exception e){
-            ApiResponse<DrugCreateDTO> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
+            ApiResponse<DrugDTO> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
     @GetMapping("/my-store")
-    public ResponseEntity<ApiResponse<List<DrugCreateDTO>>> getAllDrugs(){
+    public ResponseEntity<ApiResponse<List<DrugDTO>>> getAllDrugs(){
         try{
             UUID id = storeService.getCurrentUserId();
-            List<DrugCreateDTO> drugsOwnedByStore = drugService.getAllStoreDrugs(id);
+            List<DrugDTO> drugsOwnedByStore = drugService.getAllStoreDrugs(id);
 
-            ApiResponse<List<DrugCreateDTO>> response = ApiResponse.success(
+            ApiResponse<List<DrugDTO>> response = ApiResponse.success(
                     "Drugs fetched successfully!",
                     drugsOwnedByStore
             );
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            ApiResponse<List<DrugCreateDTO>> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
+            ApiResponse<List<DrugDTO>> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
     @GetMapping("/{drugId}")
-    public ResponseEntity<ApiResponse<DrugCreateDTO>> getSpecificDrug(@PathVariable UUID drugId){
+    public ResponseEntity<ApiResponse<DrugDTO>> getSpecificDrug(@PathVariable UUID drugId){
         try{
 
-            DrugCreateDTO drug = drugService.getSingleDrug(drugId);
+            DrugDTO drug = drugService.getSingleDrug(drugId);
 
-            ApiResponse<DrugCreateDTO> response = ApiResponse.success(
+            ApiResponse<DrugDTO> response = ApiResponse.success(
                     "Drug fetched successfully!",
                     drug
             );
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            ApiResponse<DrugCreateDTO> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
+            ApiResponse<DrugDTO> errorResponse = ApiResponse.error("An unexpected error occurred: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
