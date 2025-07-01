@@ -1,7 +1,6 @@
 package com.mrazuka.medlocator.Service;
 
 import com.mrazuka.medlocator.Dto.DrugCreateDTO;
-import com.mrazuka.medlocator.Dto.StoreUpdateDTO;
 import com.mrazuka.medlocator.Model.DrugModel;
 import com.mrazuka.medlocator.Model.StoreModel;
 import com.mrazuka.medlocator.Repository.DrugRepository;
@@ -10,7 +9,9 @@ import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class DrugService {
@@ -32,5 +33,23 @@ public class DrugService {
 
         drug.setStore(store);
         return modelMapper.map(drugRepository.save(drug), DrugCreateDTO.class);
+    }
+
+    public List<DrugCreateDTO> getAllStoreDrugs(UUID id) {
+        List<DrugModel> drugs = drugRepository.findAllByStore_Id(id);
+
+        // Map the list of DrugModel to a list of DrugCreateDTO
+        List<DrugCreateDTO> drugCreateDTOs = drugs.stream()
+                .map(drugModel -> modelMapper.map(drugModel, DrugCreateDTO.class))
+                .collect(Collectors.toList());
+
+        return drugCreateDTOs;
+    }
+
+    public DrugCreateDTO getSingleDrug(UUID drugId) {
+        DrugModel drug = drugRepository.findById(drugId)
+                .orElseThrow(() -> new EntityNotFoundException("Drug with ID " + drugId + " not found."));
+
+        return modelMapper.map(drug, DrugCreateDTO.class);
     }
 }
